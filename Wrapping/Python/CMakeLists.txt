@@ -1,6 +1,6 @@
 cmake_minimum_required ( VERSION 3.10 FATAL_ERROR )
 
-project( SimpleITK_Python )
+project( SimpleElastix_Python )
 
 include(../../CMake/sitkProjectLanguageCommon.cmake NO_POLICY_SCOPE)
 
@@ -11,7 +11,7 @@ else()
 endif()
 find_package ( PythonInterp REQUIRED )
 find_package ( PythonLibs ${_QUIET_LIBRARY} )
-include_directories ( ${SimpleITK_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR} )
+include_directories ( ${SimpleITK_INCLUDE_DIRS} ${SimpleElastix_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR} )
 
 #
 # Options
@@ -24,7 +24,7 @@ option ( SimpleITK_PYTHON_WHEEL "Add building of python wheels to the dist targe
 mark_as_advanced( SimpleITK_PYTHON_WHEEL )
 
 
-set_source_files_properties ( SimpleITK.i PROPERTIES CPLUSPLUS ON )
+set_source_files_properties ( SimpleElastix.i PROPERTIES CPLUSPLUS ON )
 
 # Run swig
 set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_GLOBAL_FLAGS} -features autodoc=1 -keyword )
@@ -32,41 +32,41 @@ if( SimpleITK_PYTHON_THREADS )
   set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_FLAGS} -threads)
 endif()
 set(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
-set(SWIG_MODULE_SimpleITK_EXTRA_DEPS ${SWIG_EXTRA_DEPS}
+set(SWIG_MODULE_SimpleElastix_EXTRA_DEPS ${SWIG_EXTRA_DEPS}
   ${CMAKE_CURRENT_SOURCE_DIR}/Python.i )
-SWIG_add_module ( SimpleITK python
-  SimpleITK.i
+SWIG_add_module ( SimpleElastix python
+  SimpleElastix.i
   sitkPyCommand.cxx )
-set(SWIG_MODULE_SimpleITKPython_TARGET_NAME "${SWIG_MODULE_SimpleITK_TARGET_NAME}")
-target_link_libraries( ${SWIG_MODULE_SimpleITKPython_TARGET_NAME} ${SimpleITK_LIBRARIES} )
+set(SWIG_MODULE_SimpleElastixPython_TARGET_NAME "${SWIG_MODULE_SimpleElastix_TARGET_NAME}")
+target_link_libraries( ${SWIG_MODULE_SimpleElastixPython_TARGET_NAME} ${SimpleElastix_LIBRARIES} )
 if(NOT PYTHON_DEBUG_LIBRARIES AND MSVC)
   # If there is not a specified debug library use the release library,
   # via a special sitkPython.h header.
-  target_compile_definitions(${SWIG_MODULE_SimpleITKPython_TARGET_NAME}
+  target_compile_definitions(${SWIG_MODULE_SimpleElastixPython_TARGET_NAME}
     PRIVATE
     $<$<CONFIG:Debug>:SWIG_PYTHON_INTERPRETER_NO_DEBUG>)
 endif()
-sitk_target_link_libraries_with_dynamic_lookup( ${SWIG_MODULE_SimpleITKPython_TARGET_NAME} ${PYTHON_LIBRARIES} )
+sitk_target_link_libraries_with_dynamic_lookup( ${SWIG_MODULE_SimpleElastixPython_TARGET_NAME} ${PYTHON_LIBRARIES} )
 
-target_include_directories( ${SWIG_MODULE_SimpleITKPython_TARGET_NAME}
+target_include_directories( ${SWIG_MODULE_SimpleElastixPython_TARGET_NAME}
   PRIVATE
     ${PYTHON_INCLUDE_DIR} )
-target_include_directories( ${SWIG_MODULE_SimpleITKPython_TARGET_NAME}
+target_include_directories( ${SWIG_MODULE_SimpleElastixPython_TARGET_NAME}
   PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR} )
 
-set_target_properties( ${SWIG_MODULE_SimpleITK_TARGET_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+set_target_properties( ${SWIG_MODULE_SimpleElastix_TARGET_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 if ( MSVC )
     foreach ( CMAKE_CONFIGURATION_TYPE ${CMAKE_CONFIGURATION_TYPES} )
       string(TOUPPER ${CMAKE_CONFIGURATION_TYPE} CMAKE_CONFIGURATION_TYPE)
-      set_target_properties(${SWIG_MODULE_SimpleITK_TARGET_NAME}
+      set_target_properties(${SWIG_MODULE_SimpleElastix_TARGET_NAME}
         PROPERTIES LIBRARY_OUTPUT_DIRECTORY_${CMAKE_CONFIGURATION_TYPE} "${CMAKE_CURRENT_BINARY_DIR}")
-      set_target_properties(${SWIG_MODULE_SimpleITK_TARGET_NAME}
+      set_target_properties(${SWIG_MODULE_SimpleElastix_TARGET_NAME}
         PROPERTIES RUNTIME_OUTPUT_DIRECTORY_${CMAKE_CONFIGURATION_TYPE} "${CMAKE_CURRENT_BINARY_DIR}")
     endforeach( )
 endif()
 set_source_files_properties(${swig_generated_file_fullname} PROPERTIES COMPILE_FLAGS "-w")
-sitk_strip_target( ${SWIG_MODULE_SimpleITKPython_TARGET_NAME} )
+sitk_strip_target( ${SWIG_MODULE_SimpleElastixPython_TARGET_NAME} )
 
 
 
@@ -79,16 +79,16 @@ set(SimpleITK_PYTHON_TEST_EXECUTABLE "${PYTHON_EXECUTABLE}" CACHE INTERNAL "Pyth
 if(DEFINED SKBUILD)
   # Currently this installation
   install(FILES
-      ${CMAKE_CURRENT_BINARY_DIR}/SimpleITK.py
+      ${CMAKE_CURRENT_BINARY_DIR}/SimpleElastix.py
       ${CMAKE_CURRENT_SOURCE_DIR}/Packaging/__init__.py
       ${SimpleITK_DOC_FILES}
-    DESTINATION SimpleITK
+    DESTINATION SimpleElastix
     COMPONENT Runtime
     )
 
-  install(TARGETS ${SWIG_MODULE_SimpleITKPython_TARGET_NAME}
-    RUNTIME DESTINATION SimpleITK COMPONENT Runtime
-    LIBRARY DESTINATION SimpleITK COMPONENT Runtime
+  install(TARGETS ${SWIG_MODULE_SimpleElastixPython_TARGET_NAME}
+    RUNTIME DESTINATION SimpleElastix COMPONENT Runtime
+    LIBRARY DESTINATION SimpleElastix COMPONENT Runtime
     )
 else()
   include(LegacyPackaging.cmake)

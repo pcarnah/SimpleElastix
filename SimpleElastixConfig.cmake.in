@@ -1,0 +1,90 @@
+#-----------------------------------------------------------------------------
+#
+# SimpleElastixConfig.cmake - SimpleElastix CMake configuration file for external
+# projects.
+#
+# This file is configured by SimpleElastix, imported into client projects by
+# find_package(SimpleElastix), and provides values for UseSimpleElastix.cmake.
+
+# This SimpleElastixConfig file is configured for the @SimpleElastixConfig_TREE@ tree
+
+# Compute this installation's prefix from this file's location:
+get_filename_component(_SimpleElastixConfig_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+@SimpleElastixConfig_CODE@
+
+# The SimpleElastix version number
+#
+# If version component is unset it the SimpleElastix project it will
+# remain unset for project who use it, this changes the default CMake
+# behavior of setting unset version values to 0.
+set(SimpleElastix_VERSION_MAJOR "@SimpleElastix_VERSION_MAJOR@")
+set(SimpleElastix_VERSION_MINOR "@SimpleElastix_VERSION_MINOR@")
+set(SimpleElastix_VERSION_PATCH)
+if(NOT "@SimpleElastix_VERSION_PATCH@" STREQUAL "")
+  set(SimpleElastix_VERSION_PATCH "@SimpleElastix_VERSION_PATCH@")
+endif()
+set(SimpleElastix_VERSION_TWEAK)
+if(NOT "@SimpleElastix_VERSION_TWEAK@" STREQUAL "")
+  set(SimpleElastix_VERSION_TWEAK  "@SimpleElastix_VERSION_TWEAK@")
+endif()
+set(SimpleElastix_VERSION_RC)
+if(NOT "@SimpleElastix_VERSION_RC@" STREQUAL "")
+  set(SimpleElastix_VERSION_RC "@SimpleElastix_VERSION_RC@")
+endif()
+set(SimpleElastix_VERSION_POST)
+if(NOT "@SimpleElastix_VERSION_POST@" STREQUAL "")
+  set(SimpleElastix_VERSION_POST "@SimpleElastix_VERSION_POST@")
+endif()
+set(SimpleElastix_VERSION_DEV)
+if(NOT "@SimpleElastix_VERSION_DEV@" STREQUAL "")
+  set(SimpleElastix_VERSION_DEV "@SimpleElastix_VERSION_DEV@")
+endif()
+set(SimpleElastix_VERSION_HASH)
+if(NOT "SimpleElastix_VERSION_HASH@" STREQUAL "")
+  set(SimpleElastix_VERSION_HASH "@SimpleElastix_VERSION_HASH@")
+endif()
+set(SimpleElastix_VERSION_COUNT)
+
+
+
+
+# The SimpleElastix include file directories.
+set(SimpleElastix_INCLUDE_DIRS "@SimpleElastixConfig_INCLUDE_DIRS@")
+
+# The SimpleElastix library directories.
+set(ITK_LIBRARY_DIRS "@ITK_LIBRARY_DIRS@")
+set(SimpleElastix_LIBRARY_DIRS "${ITK_LIBRARY_DIRS}")
+
+# The location of the UseITK.cmake file.
+set(SimpleElastix_USE_FILE "${_SimpleElastixConfig_DIR}/UseSimpleElastix.cmake")
+
+# Locate ITK for required targets
+if(NOT ITK_CONFIG_TARGETS_FILE)
+  find_package(ITK "@ITK_VERSION@" EXACT REQUIRED)
+endif()
+
+# Locate elastix for required targets
+if(NOT ELASTIX_CONFIG_TARGETS_FILE)
+  if("@SimpleElastixConfig_TREE@" STREQUAL "build")
+    set(ELASTIX_CONFIG_TARGETS_FILE "@Elastix_DIR@/ElastixTargets.cmake")
+  else()
+    find_package(Elastix "@Elastix_VERSION@" EXACT REQUIRED)
+  endif()
+endif()
+
+# Import elastix targets
+if(NOT ELASTIX_TARGETS_IMPORTED)
+  set(ELASTIX_TARGETS_IMPORTED 1)
+  include("${ELASTIX_CONFIG_TARGETS_FILE}")
+endif()
+
+# Import SimpleElastix targets.
+set(SimpleElastix_TARGETS_FILE "${_SimpleElastixConfig_DIR}/SimpleElastixTargets.cmake")
+if(NOT SimpleElastix_TARGETS_IMPORTED)
+  set(SimpleElastix_TARGETS_IMPORTED 1)
+  include("${SimpleElastix_TARGETS_FILE}")
+endif()
+
+# A list of all libraries for SimpleElastix.  Those listed here should
+# automatically pull in their dependencies via imported targets.
+set(SimpleElastix_LIBRARIES "@SimpleElastix_LIBRARIES@")

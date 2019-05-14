@@ -1,1 +1,1 @@
-from .SimpleITK import *
+from .SimpleElastix import *

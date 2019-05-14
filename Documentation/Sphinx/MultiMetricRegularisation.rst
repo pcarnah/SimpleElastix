@@ -1,2 +1,0 @@
-Multi-Metric Regularisation
-===========================

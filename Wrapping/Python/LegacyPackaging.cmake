@@ -29,11 +29,11 @@ set(SimpleITK_BINARY_MODULE)
 # Step 2:
 # Do file configuration during compilation with generator expressions
 add_custom_command(
-  TARGET ${SWIG_MODULE_SimpleITKPython_TARGET_NAME}
+  TARGET ${SWIG_MODULE_SimpleElastixPython_TARGET_NAME}
   POST_BUILD
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
   COMMAND ${CMAKE_COMMAND}
-    "-DSimpleITK_BINARY_MODULE=$<TARGET_FILE_NAME:${SWIG_MODULE_SimpleITKPython_TARGET_NAME}>"
+    "-DSimpleITK_BINARY_MODULE=$<TARGET_FILE_NAME:${SWIG_MODULE_SimpleElastixPython_TARGET_NAME}>"
     "-DCONFIGUREBUILDTIME_filename=${CMAKE_CURRENT_BINARY_DIR}/Packaging/setup.py.in"
     "-DCONFIGUREBUILDTIME_out_filename=${CMAKE_CURRENT_BINARY_DIR}/Packaging/setup.py"
     -P "${SimpleITK_SOURCE_DIR}/CMake/configure_file_build_time.cmake"
@@ -96,7 +96,7 @@ if (SimpleITK_PYTHON_USE_VIRTUALENV)
   add_custom_command( OUTPUT "${VIRTUAL_PYTHON_EXECUTABLE}"
     COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/PythonVirtualEnvInstall.cmake"
     DEPENDS
-    "${SWIG_MODULE_SimpleITKPython_TARGET_NAME}"
+    "${SWIG_MODULE_SimpleElastixPython_TARGET_NAME}"
     "${CMAKE_CURRENT_BINARY_DIR}/PythonVirtualEnvInstall.cmake"
     COMMENT "Creating python virtual enviroment..."
     )

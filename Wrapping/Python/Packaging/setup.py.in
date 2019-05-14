@@ -70,13 +70,13 @@ class build_ext(_build_ext):
 
 
 setup(
-    name = 'SimpleITK',
+    name = 'SimpleElastix',
     version = get_pep386version(),
     author = 'Insight Software Consortium',
     author_email = 'insight-users@itk.org',
-    ext_modules=[Extension('SimpleITK._SimpleITK', [r'@SimpleITK_BINARY_MODULE@'])],
-    packages= ['SimpleITK'],
-    package_dir = {'SimpleITK':r'@SimpleITK_PYTHON_PACKAGE_DIR@'},
+    ext_modules=[Extension('SimpleElastix._SimpleElastix', [r'@SimpleITK_BINARY_MODULE@'])],
+    packages= ['SimpleElastix'],
+    package_dir = {'SimpleElastix':r'@SimpleITK_PYTHON_PACKAGE_DIR@'},
     download_url = r'https://www.itk.org/SimpleITKDoxygen/html/PyDownloadPage.html',
     platforms = [],
     description = r'SimpleITK is a simplified interface to the Insight Toolkit (ITK) for image registration and segmentation',

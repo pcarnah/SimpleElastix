@@ -1,3 +1,0 @@
-sphinx-tabs
-cmake
-sphinx_rtd_theme

@@ -4,7 +4,7 @@ cmake_minimum_required ( VERSION 3.10 FATAL_ERROR )
 # http://www.cmake.org/pipermail/cmake/2010-February/035174.html
 SET(MSVC_INCREMENTAL_DEFAULT ON)
 
-project ( SimpleITK )
+project ( SimpleElastix )
 
 cmake_policy( VERSION 3.10 )
 
@@ -18,36 +18,6 @@ endforeach()
 # Include extra CMake files
 list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 
-#-----------------------------------------------------------------------------
-# Version information
-include(Version.cmake)
-
-set(SimpleITK_VERSION "${SimpleITK_VERSION_MAJOR}.${SimpleITK_VERSION_MINOR}")
-if(DEFINED SimpleITK_VERSION_PATCH)
-  set(SimpleITK_VERSION "${SimpleITK_VERSION}.${SimpleITK_VERSION_PATCH}")
-  if(DEFINED SimpleITK_VERSION_TWEAK)
-    set(SimpleITK_VERSION "${SimpleITK_VERSION}.${SimpleITK_VERSION_TWEAK}")
-  endif()
-endif()
-
-if(DEFINED SimpleITK_VERSION_RC)
-  set(SimpleITK_VERSION "${SimpleITK_VERSION}${SimpleITK_VERSION_RC}")
-endif()
-if(DEFINED SimpleITK_VERSION_POST)
-  set(SimpleITK_VERSION "${SimpleITK_VERSION}.post${SimpleITK_VERSION_POST}")
-elseif(DEFINED SimpleITK_VERSION_DEV)
-  set(SimpleITK_VERSION "${SimpleITK_VERSION}.dev${SimpleITK_VERSION_DEV}")
-endif()
-
-option( SimpleITK_BUILD_DISTRIBUTE "Remove '-g#####' from version. ( for official distribution only )" OFF )
-mark_as_advanced( SimpleITK_BUILD_DISTRIBUTE )
-if( NOT SimpleITK_BUILD_DISTRIBUTE )
-  set(SimpleITK_VERSION "${SimpleITK_VERSION}-g${SimpleITK_VERSION_HASH}")
-endif()
-
-message(STATUS "Building SimpleITK version \"${SimpleITK_VERSION}\"")
-
-
 #-----------------------------------------------------------
 # Check and set required flags for compilation
 # This must be done before any other try compiles based tests are
@@ -58,6 +28,12 @@ include(sitkCompilerWarningsSettings)
 include( sitkSITKLegacyNaming )
 include( sitkForbidDownloadsOption )
 include( sitkTargetUseITK )
+
+#-----------------------------------------------------------
+# Configure SimpleITK
+
+find_package(SimpleITK REQUIRED)
+include(${SimpleITK_USE_FILE})
 
 find_package(ITK REQUIRED )
 #we require certain packages be turned on in ITK
@@ -101,6 +77,9 @@ endif()
 if(ELASTIX_BUILD_EXECUTABLE)
   message(FATAL_ERROR "SimpleElastix requires elastix libraries, please set ELASTIX_BUILD_EXECUTABLE=OFF and rebuild elastix.")
 endif()
+
+
+
 
 #----------------------------------------------------------
 # Place all options to go into sitkConfigure.h here
@@ -155,67 +134,44 @@ if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 endif()
 
-set ( SimpleITK_INCLUDE_DIRS
-      ${CMAKE_SOURCE_DIR}/Code/Common/include
-      ${CMAKE_SOURCE_DIR}/Code/Registration/include
-      ${CMAKE_SOURCE_DIR}/Code/BasicFilters/include
-      ${CMAKE_SOURCE_DIR}/Code/IO/include
-      ${CMAKE_SOURCE_DIR}/Code/Elastix/include
-      ${CMAKE_BINARY_DIR}/Code/BasicFilters/include
-      ${CMAKE_BINARY_DIR}/Code/Common/include
-      )
+set ( SimpleElastix_SOURCE_DIR ${CMAKE_SOURCE_DIR} )
+set ( SimpleElastix_BINARY_DIR ${CMAKE_BINARY_DIR} )
+set ( SimpleElastix_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/Elastix/include )
+set ( SimpleElastix_LIBRARIES ElastixImageFilter TransformixImageFilter )
 
-set ( SimpleITK_LIBRARIES SimpleITKCommon SimpleITKIO SimpleITKRegistration ElastixImageFilter TransformixImageFilter )
-
-if (SimpleITK_EXPLICIT_INSTANTIATION)
-  list ( APPEND SimpleITK_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/Code/Explicit/include )
-  # This library is linked privately to SimpleITK libraries and is not
-  # part of the public link interface
-  #list ( APPEND SimpleITK_LIBRARIES  SimpleITKExplicit )
-endif()
-
-set( SimpleITK_LIBRARIES ${SimpleITK_LIBRARIES}  CACHE INTERNAL "" )
 
 # Be sure to clear these each time
 set ( GENERATED_TEST_LIST "" CACHE INTERNAL "" )
 set ( GENERATED_FILTER_LIST "" CACHE INTERNAL "" )
 set ( GENERATED_TEST_SOURCE_LIST "" CACHE INTERNAL "" )
 
-# Create cached list of all template components
-file( GLOB template_components
-      ${SimpleITK_SOURCE_DIR}/ExpandTemplateGenerator/Components/[^.]*.h.in
-      ${SimpleITK_SOURCE_DIR}/ExpandTemplateGenerator/Components/[^.]*.cxx.in
-    )
-set ( template_components ${template_components} CACHE INTERNAL "" )
-
-
 #------------------------------------------------------------------------------
 # Variables for use in install rules:
 
-if(NOT SimpleITK_INSTALL_RUNTIME_DIR)
-  set(SimpleITK_INSTALL_RUNTIME_DIR "bin")
+if(NOT SimpleElastix_INSTALL_RUNTIME_DIR)
+  set(SimpleElastix_INSTALL_RUNTIME_DIR "bin")
 endif()
-if(NOT SimpleITK_INSTALL_LIBRARY_DIR)
-  set(SimpleITK_INSTALL_LIBRARY_DIR "lib")
+if(NOT SimpleElastix_INSTALL_LIBRARY_DIR)
+  set(SimpleElastix_INSTALL_LIBRARY_DIR "lib")
 endif()
-if(NOT SimpleITK_INSTALL_ARCHIVE_DIR)
-  set(SimpleITK_INSTALL_ARCHIVE_DIR "lib")
+if(NOT SimpleElastix_INSTALL_ARCHIVE_DIR)
+  set(SimpleElastix_INSTALL_ARCHIVE_DIR "lib")
 endif()
-if(NOT SimpleITK_INSTALL_INCLUDE_DIR)
-  set(SimpleITK_INSTALL_INCLUDE_DIR "include/SimpleITK-${SimpleITK_VERSION_MAJOR}.${SimpleITK_VERSION_MINOR}")
+if(NOT SimpleElastix_INSTALL_INCLUDE_DIR)
+  set(SimpleElastix_INSTALL_INCLUDE_DIR "include/SimpleITK-${SimpleITK_VERSION_MAJOR}.${SimpleITK_VERSION_MINOR}")
 endif()
-if(NOT SimpleITK_INSTALL_DOC_DIR)
-  set(SimpleITK_INSTALL_DOC_DIR share/doc/SimpleITK-${SimpleITK_VERSION_MAJOR}.${SimpleITK_VERSION_MINOR})
+if(NOT SimpleElastix_INSTALL_DOC_DIR)
+  set(SimpleElastix_INSTALL_DOC_DIR share/doc/SimpleITK-${SimpleITK_VERSION_MAJOR}.${SimpleITK_VERSION_MINOR})
 endif()
-if(NOT SimpleITK_INSTALL_PACKAGE_DIR)
-  set(SimpleITK_INSTALL_PACKAGE_DIR "${SimpleITK_INSTALL_LIBRARY_DIR}/cmake/SimpleITK-${SimpleITK_VERSION_MAJOR}.${SimpleITK_VERSION_MINOR}")
+if(NOT SimpleElastix_INSTALL_PACKAGE_DIR)
+  set(SimpleElastix_INSTALL_PACKAGE_DIR "${SimpleElastix_INSTALL_LIBRARY_DIR}/cmake/SimpleITK-${SimpleITK_VERSION_MAJOR}.${SimpleITK_VERSION_MINOR}")
 endif()
 
 function(sitk_install_exported_target tgt)
-  # Remove the build tree's SimpleITKTargets file if this is the first call:
+  # Remove the build tree's SimpleElastixTargets file if this is the first call:
   get_property(first_time GLOBAL PROPERTY SimpleITK_FIRST_EXPORTED_TARGET)
   if(NOT first_time)
-    file(REMOVE ${CMAKE_BINARY_DIR}/SimpleITKTargets.cmake)
+    file(REMOVE ${CMAKE_BINARY_DIR}/SimpleElastixTargets.cmake)
     set_property(GLOBAL PROPERTY SimpleITK_FIRST_EXPORTED_TARGET 1)
   endif()
 
@@ -230,18 +186,19 @@ function(sitk_install_exported_target tgt)
   endif()
 
   export(TARGETS ${tgt}
-    APPEND FILE "${CMAKE_BINARY_DIR}/SimpleITKTargets.cmake"
+    APPEND FILE "${CMAKE_BINARY_DIR}/SimpleElastixTargets.cmake"
     )
 
   install(TARGETS ${tgt}
-    EXPORT SimpleITKTargets
-    RUNTIME DESTINATION ${SimpleITK_INSTALL_RUNTIME_DIR} COMPONENT Runtime
-    LIBRARY DESTINATION ${SimpleITK_INSTALL_LIBRARY_DIR} COMPONENT Runtime
-    ARCHIVE DESTINATION ${SimpleITK_INSTALL_ARCHIVE_DIR} COMPONENT Development
+    EXPORT SimpleElastixTargets
+    RUNTIME DESTINATION ${SimpleElastix_INSTALL_RUNTIME_DIR} COMPONENT Runtime
+    LIBRARY DESTINATION ${SimpleElastix_INSTALL_LIBRARY_DIR} COMPONENT Runtime
+    ARCHIVE DESTINATION ${SimpleElastix_INSTALL_ARCHIVE_DIR} COMPONENT Development
     )
 endfunction()
 
 include(sitkStripOption)
+
 
 #------------------------------------------------------------------------------
 # These are some system specific compiler options needed to build SimpleITK
@@ -286,31 +243,6 @@ if(NOT SITK_HAS_STDINT_H)
     endif()
 endif()
 
-#------------------------------------------------------------------------------
-# assemble a list of important documentation from Simple ITK and ITK
-
-set ( SimpleITK_DOC_FILES
-  "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE"
-  "${CMAKE_CURRENT_SOURCE_DIR}/NOTICE"
-  "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
-  )
-
-# add important files from ITK
-
-# if using from build tree then ITK_USE_FILE will be
-# ITK_SOURCE_DIR/CMake/UseITK.cmake. The needed docs should be in the
-# root of the source tree
-get_filename_component( _itk_root "${ITK_USE_FILE}" PATH )
-get_filename_component( _itk_root "${_itk_root}" PATH )
-
-set(_itk_doc_search_paths "${_itk_root}")
-
-get_filename_component( _itk_root "${_itk_root}" PATH )
-get_filename_component( _itk_root "${_itk_root}" PATH )
-list( APPEND _itk_doc_search_paths
-   "${_itk_root}/share/doc/ITK-${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}"
-   "${_itk_root}/share/doc/ITK"
-)
 
 
 #
@@ -346,30 +278,11 @@ endforeach()
 
 
 #------------------------------------------------------------------------------
-# Set up Documentation
-include(${SimpleITK_SOURCE_DIR}/Utilities/Doxygen/Doxygen.cmake)
-
-#------------------------------------------------------------------------------
 # Set up wrapping.
 #
 # Use CMake file which present options for wrapped languages, and finds languages as needed
 #
 include(sitkLanguageOptions)
-
-#------------------------------------------------------------------------------
-# Ensure that development strips have been setup
-# include(sitkCheckSourceTree)
-# This has been disabled for SimpleElastix.
-
-#-----------------------------------------------------------------------------
-if(NOT EXISTS "${SimpleITK_SOURCE_DIR}/.ExternalData/README.rst")
-  # This file is always present in version-controlled source trees
-  # so we must have been extracted from a source tarball with no
-  # data objects needed for testing.  Turn off tests by default
-  # since enabling them requires network access or manual data
-  # store configuration.
-  option(BUILD_TESTING "Build the testing tree." OFF)
-endif()
 
 #------------------------------------------------------------------------------
 # set things up for testing, this configuration needs to occour before
@@ -378,13 +291,12 @@ include(CTest)
 
 #------------------------------------------------------------------------------
 # Go to subdirectories
-add_subdirectory ( Utilities )
-add_subdirectory ( Code )
+add_subdirectory ( Elastix )
 add_subdirectory ( Wrapping )
 
 #------------------------------------------------------------------------------
 # ITK uses KWStyle for checking the coding style
-include(${SimpleITK_SOURCE_DIR}/Utilities/KWStyle/KWStyle.cmake)
+include(${SimpleElastix_SOURCE_DIR}/Utilities/KWStyle/KWStyle.cmake)
 
 #------------------------------------------------------------------------------
 # set things up for testing, if enabled
@@ -400,91 +312,67 @@ if ( BUILD_TESTING )
   configure_file(CMake/CTestCustom.cmake.in CTestCustom.cmake)
 endif()
 
-# optional examples directory with testing
-option(BUILD_EXAMPLES "Build the Examples directory." ON)
-
-if(BUILD_EXAMPLES)
-  add_subdirectory ( Examples )
-endif()
-
 
 #------------------------------------------------------------------------------
 # Configure SimpleITKConfig.cmake for the build tree.
-set(SimpleITKConfig_TREE "build")
-set(SimpleITKConfig_CODE "")
-set(SimpleITKConfig_INCLUDE_DIRS ${SimpleITK_INCLUDE_DIRS})
+set(SimpleElastixConfig_TREE "build")
+set(SimpleElastixConfig_CODE "")
+set(SimpleElastixConfig_INCLUDE_DIRS ${SimpleElastix_INCLUDE_DIRS})
 
-configure_file(SimpleITKConfig.cmake.in
-               SimpleITKConfig.cmake @ONLY IMMEDIATE)
+configure_file(SimpleElastixConfig.cmake.in
+               SimpleElastixConfig.cmake @ONLY IMMEDIATE)
 
 #------------------------------------------------------------------------------
 # Configure SimpleITKConfig.cmake for the install tree.
-set(SimpleITKConfig_TREE "install")
+set(SimpleElastixConfig_TREE "install")
 
-set(SimpleITKConfig_CODE "set(SimpleITK_INSTALL_PREFIX \"\${_SimpleITKConfig_DIR}\")")
+set(SimpleElastixConfig_CODE "set(SimpleElastix_INSTALL_PREFIX \"\${_SimpleElastixConfig_DIR}\")")
 # Construct the proper number of get_filename_component(... PATH)
 # calls to compute the installation prefix.
-string(REGEX REPLACE "/" ";" _count "${SimpleITK_INSTALL_PACKAGE_DIR}")
+string(REGEX REPLACE "/" ";" _count "${SimpleElastix_INSTALL_PACKAGE_DIR}")
 foreach(p ${_count})
-  set(SimpleITKConfig_CODE "${SimpleITKConfig_CODE}
-get_filename_component(SimpleITK_INSTALL_PREFIX \"\${SimpleITK_INSTALL_PREFIX}\" PATH)")
+  set(SimpleElastixConfig_CODE "${SimpleElastixConfig_CODE}
+get_filename_component(SimpleElastix_INSTALL_PREFIX \"\${SimpleElastix_INSTALL_PREFIX}\" PATH)")
 endforeach(p)
-set(SimpleITKConfig_CODE "${SimpleITKConfig_CODE}\n")
+set(SimpleElastixConfig_CODE "${SimpleElastixConfig_CODE}\n")
 
-set(SimpleITKConfig_INCLUDE_DIRS
-  "\${SimpleITK_INSTALL_PREFIX}/${SimpleITK_INSTALL_INCLUDE_DIR}")
+set(SimpleElastixConfig_INCLUDE_DIRS
+  "\${SimpleElastix_INSTALL_PREFIX}/${SimpleElastix_INSTALL_INCLUDE_DIR}")
 
-configure_file(SimpleITKConfig.cmake.in
-               CMakeFiles/SimpleITKConfig.cmake @ONLY IMMEDIATE)
+configure_file(SimpleElastixConfig.cmake.in
+               CMakeFiles/SimpleElastixConfig.cmake @ONLY IMMEDIATE)
 
 #------------------------------------------------------------------------------
 # Help other projects use SimpleITK
-configure_file(UseSimpleITK.cmake.in
-               UseSimpleITK.cmake COPYONLY IMMEDIATE)
+configure_file(UseSimpleElastix.cmake.in
+               UseSimpleElastix.cmake COPYONLY IMMEDIATE)
 
 configure_file(SimpleITKConfigVersion.cmake.in
                SimpleITKConfigVersion.cmake @ONLY IMMEDIATE)
 
-
 #------------------------------------------------------------------------------
 # INSTALLATION
 
-install(FILES ${SimpleITK_BINARY_DIR}/CMakeFiles/SimpleITKConfig.cmake
-              ${SimpleITK_BINARY_DIR}/SimpleITKConfigVersion.cmake
-              ${SimpleITK_BINARY_DIR}/UseSimpleITK.cmake
-  DESTINATION ${SimpleITK_INSTALL_PACKAGE_DIR}
+install(FILES ${SimpleElastix_BINARY_DIR}/CMakeFiles/SimpleElastixConfig.cmake
+              ${SimpleElastix_BINARY_DIR}/SimpleITKConfigVersion.cmake
+              ${SimpleElastix_BINARY_DIR}/UseSimpleElastix.cmake
+  DESTINATION ${SimpleElastix_INSTALL_PACKAGE_DIR}
   COMPONENT Development)
 
-install(EXPORT SimpleITKTargets
-  DESTINATION ${SimpleITK_INSTALL_PACKAGE_DIR}
+install(EXPORT SimpleElastixTargets
+  DESTINATION ${SimpleElastix_INSTALL_PACKAGE_DIR}
   COMPONENT Development)
 
 file( GLOB __files
-  ${CMAKE_SOURCE_DIR}/Code/BasicFilters/include/[^.]*.h
-  ${CMAKE_SOURCE_DIR}/Code/BasicFilters/include/[^.]*.hxx
-  ${CMAKE_SOURCE_DIR}/Code/Common/include/[^.]*.h
-  ${CMAKE_SOURCE_DIR}/Code/Common/include/[^.]*.hxx
-  ${CMAKE_SOURCE_DIR}/Code/IO/include/[^.]*.h
-  ${CMAKE_SOURCE_DIR}/Code/IO/include/[^.]*.hxx
-  ${CMAKE_SOURCE_DIR}/Code/Registration/include/[^.]*.h
-  ${CMAKE_SOURCE_DIR}/Code/Registration/include/[^.]*.hxx
+  ${CMAKE_SOURCE_DIR}/Elastix/include/[^.]*.h
+  ${CMAKE_SOURCE_DIR}/Elastix/include/[^.]*.hxx
   )
 
 install(FILES ${__files}
-  DESTINATION ${SimpleITK_INSTALL_INCLUDE_DIR}
+  DESTINATION ${SimpleElastix_INSTALL_INCLUDE_DIR}
   COMPONENT Development)
 
-install(
-  DIRECTORY
-    ${CMAKE_SOURCE_DIR}/Code/Common/include/Ancillary
-    ${CMAKE_SOURCE_DIR}/Code/Common/include/nsstd
-  DESTINATION
-    ${SimpleITK_INSTALL_INCLUDE_DIR}/
-  COMPONENT Development
-  FILES_MATCHING PATTERN "*.h"
-)
-
-install(FILES ${SimpleITK_DOC_FILES} DESTINATION "${SimpleITK_INSTALL_DOC_DIR}" COMPONENT Runtime)
+install(FILES ${SimpleITK_DOC_FILES} DESTINATION "${SimpleElastix_INSTALL_DOC_DIR}" COMPONENT Runtime)
 
 #------------------------------------------------------------------------------
 # CPack

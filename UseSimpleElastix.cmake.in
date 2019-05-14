@@ -1,0 +1,12 @@
+#
+# This file sets up include directories, link directories, and
+# compiler settings for a project to use SimpleElastix.  It should not be
+# included directly, but rather through the SimpleElastix_USE_FILE setting
+# obtained from SimpleElastixConfig.cmake.
+#
+
+# Add include directories needed to use SimpleElastix.
+include_directories(${SimpleElastix_INCLUDE_DIRS})
+
+# Add link directories needed to use SimpleElastix.
+link_directories(${SimpleElastix_LIBRARY_DIRS})
