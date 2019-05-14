@@ -4,7 +4,7 @@ Image registration is the process of transforming images into a common coordinat
 
 - elastix and transformix bindings for C++, Python, Java, R, Ruby, Octave, Lua, Tcl and C# (see [elastix manual](http://elastix.isi.uu.nl/download/elastix_manual_v4.7.pdf "elastix manual") for a list of supported registration algorithms).
 - Pre-configured registration methods that work well in many cases and serve as starting points for tuning elastix to domain-specific applications.
-- Installation guides, examples, and introductory material at [simpleelastix.readthedocs.org](https://simpleelastix.readthedocs.org/).
+
 - A user-friendly API that aligns with the design philosophy of SimpleITK developed specifically for rapid prototyping. If you are interested, [The Design of SimpleITK](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3874546/ "PubMed") is a great read.
 - The complete set of SimpleITK image processing algorithms.
 
@@ -52,13 +52,3 @@ for filename in population
 ```
 
 This example demonstrates the efficiency of combining SimpleElastix's object oriented interface (the way we used elastix to register images) and procedural interface (the way we used transformix to warp labels) with SimpleITK (the way we computed statistics). Previously, using elastix and transformix on large datasets would incur a significant overhead, from scripting command line invocations and arguments to copying images and transform parameter files across folders. With SimpleElastix this complexity is easier to manage and more memory and disk I/O efficient. For more examples see [the documentation](https://simpleelastix.readthedocs.org/). 
-
-### Building with the SuperBuild
-SimpleElastix integrates elastix and transformix with the SimpleITK SuperBuild. Simply clone this repository and invoke the SuperBuild as outlined in [the documentation](http://simpleelastix.readthedocs.org/GettingStarted.html). The SuperBuild will download and install dependencies (elastix, ITK, SimpleITK and SWIG) and compile SimpleElastix. Target language dependencies need to be pre-installed, e.g. `sudo apt-get install cmake swig monodevelop r-base r-base-dev ruby ruby-dev python python-dev tcl tcl-dev tk tk-dev`. Note that this project takes around an hour to build on a quad-core machine.
-
-The documentation further describes how to [build SimpleElastix on Windows](http://simpleelastix.readthedocs.org/GettingStarted.html#Windows) and how to [build SimpleElastix manually](http://simpleelastix.readthedocs.org/GettingStarted.html#building-manually-on-linux) without the SuperBuild.
-
-SimpleElastix has been tried and tested on Ubuntu 14.10 using GCC 4.9.2 and Clang 3.4.0, Mac OSX Yosemite using Apple Clang 600.0.56 and Windows 8.1 using Microsft Visual Studio 2012 C++ compiler.
-
-### About
-If you are interested in my work you are most welcome to visit [my website](https://kaspermarstal.github.io).
