@@ -53,7 +53,9 @@ set(SimpleElastix_INCLUDE_DIRS "@SimpleElastixConfig_INCLUDE_DIRS@")
 
 # The SimpleElastix library directories.
 set(ITK_LIBRARY_DIRS "@ITK_LIBRARY_DIRS@")
-set(SimpleElastix_LIBRARY_DIRS "${ITK_LIBRARY_DIRS}")
+set(SimpleElastix_LIBRARY_DIRS "@SimpleElastix_LIBRARY_DIR@")
+
+set(SimpleElastix_RUNTIME_DIRS "@SimpleElastix_BINARY_DIR@")
 
 # The location of the UseITK.cmake file.
 set(SimpleElastix_USE_FILE "${_SimpleElastixConfig_DIR}/UseSimpleElastix.cmake")

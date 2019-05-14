@@ -105,8 +105,8 @@ private:
 };
 
 // Procedural Interface 
-SITKCommon_EXPORT Image Transformix( const Image& movingImage, const std::map< std::string, std::vector< std::string > > parameterMap, const bool logToConsole = false, const std::string outputDirectory = "." );
-SITKCommon_EXPORT Image Transformix( const Image& movingImage, const std::vector< std::map< std::string, std::vector< std::string > > > parameterMapVector, const bool logToConsole = false, const std::string outputDirectory = "." );
+SITKBasicFilters_EXPORT Image Transformix( const Image& movingImage, const std::map< std::string, std::vector< std::string > > parameterMap, const bool logToConsole = false, const std::string outputDirectory = "." );
+SITKBasicFilters_EXPORT Image Transformix( const Image& movingImage, const std::vector< std::map< std::string, std::vector< std::string > > > parameterMapVector, const bool logToConsole = false, const std::string outputDirectory = "." );
 
 } // end namespace simple
 } // end namespace itk
