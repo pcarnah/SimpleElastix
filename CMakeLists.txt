@@ -136,6 +136,7 @@ endif()
 
 set ( SimpleElastix_SOURCE_DIR ${CMAKE_SOURCE_DIR} )
 set ( SimpleElastix_BINARY_DIR ${CMAKE_BINARY_DIR} )
+set ( SimpleElastix_RUNTIME_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} )
 set ( SimpleElastix_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/Elastix/include )
 set ( SimpleElastix_LIBRARIES ElastixImageFilter TransformixImageFilter )
 
