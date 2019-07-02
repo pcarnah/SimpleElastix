@@ -19,7 +19,7 @@
 #define sitkPixelIDValuesElastix_h
 
 #include "sitkCommon.h"
-#include "sitkPixelIDTypeLists.h"
+#include "sitkPixelIDTypeListsElastix.h"
 
 #include <string>
 #include <ostream>

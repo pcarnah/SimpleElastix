@@ -54,55 +54,19 @@
   }
 }
 
-// Global Tweaks to sitk::Image
-%ignore itk::simple::Image::GetITKBase( void );
-%ignore itk::simple::Image::GetITKBase( void ) const;
-
-#ifndef SWIGCSHARP
-%ignore itk::simple::Image::GetBufferAsInt8;
-%ignore itk::simple::Image::GetBufferAsUInt8;
-%ignore itk::simple::Image::GetBufferAsInt16;
-%ignore itk::simple::Image::GetBufferAsUInt16;
-%ignore itk::simple::Image::GetBufferAsInt32;
-%ignore itk::simple::Image::GetBufferAsUInt32;
-%ignore itk::simple::Image::GetBufferAsInt64;
-%ignore itk::simple::Image::GetBufferAsUInt64;
-%ignore itk::simple::Image::GetBufferAsFloat;
-%ignore itk::simple::Image::GetBufferAsDouble;
-#endif
-
 
 // This section is copied verbatim into the generated source code.
 // Any include files, definitions, etc. need to go here.
+%import "SimpleITK_Common.i"
 %{
 #include <SimpleITK.h>
 #include <sitkImageOperators.h>
+#include <sitkPixelIDTypeListsElastix.h>
+#include <sitkPixelIDValuesElastix.h>
 #include <sitkElastixImageFilter.h>
 #include <sitkTransformixImageFilter.h>
-using namespace itk::simple;
 %}
 
-
-// Help SWIG handle std vectors
-namespace std
-{
-  %template(VectorBool) vector<bool>;
-  %template(VectorUInt8) vector<uint8_t>;
-  %template(VectorInt8) vector<int8_t>;
-  %template(VectorUInt16) vector<uint16_t>;
-  %template(VectorInt16) vector<int16_t>;
-  %template(VectorUInt32) vector<uint32_t>;
-  %template(VectorInt32) vector<int32_t>;
-  %template(VectorUInt64) vector<uint64_t>;
-  %template(VectorInt64) vector<int64_t>;
-  %template(VectorFloat) vector<float>;
-  %template(VectorDouble) vector<double>;
-  %template(VectorOfImage) vector< itk::simple::Image >;
-  %template(VectorUIntList) vector< vector<unsigned int> >;
-  %template(VectorString) vector< std::string >;
-
-  %template(DoubleDoubleMap) map<double, double>;
-}
 
 // Language Specific Sections
 #if SWIGCSHARP
@@ -152,6 +116,8 @@ namespace std
 
 // Any new classes need to have an "%include" statement to be wrapped.
 
+%include "sitkPixelIDTypeListsElastix.h"
+%include "sitkPixelIDValuesElastix.h"
 
 // SimpleElastix
 %template( ParameterMap ) std::map< std::string, std::vector< std::string > >;
