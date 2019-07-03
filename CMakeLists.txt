@@ -54,6 +54,23 @@ if(ITK_FOUND)
   set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${ITK_REQUIRED_LINK_FLAGS}")
 
   link_directories( "${ITK_LIBRARY_DIRS}")
+  
+  if ( NOT ITK_VERSION VERSION_LESS "5.0.0" )
+  # Workaround to still allow using those vnl_math legacy macro's with ITK >= 5,
+  # as defined in "ITK\Modules\ThirdParty\VNL\src\vxl\vcl\vcl_legacy_aliases.h",
+  # with ITK5.
+  add_definitions(
+    -Dvnl_math_abs=vnl_math::abs
+    -Dvnl_math_max=vnl_math::max
+    -Dvnl_math_min=vnl_math::min 
+    -Dvnl_math_rnd=vnl_math::rnd
+    -Dvnl_math_sgn0=vnl_math::sgn0
+    -Dvnl_math_sgn=vnl_math::sgn
+    -Dvnl_math_sqr=vnl_math::sqr
+     # Note: std::cbrt was introduced with C++11
+     -Dvnl_math_cuberoot=std::cbrt
+   )
+endif()
 endif()
 
 

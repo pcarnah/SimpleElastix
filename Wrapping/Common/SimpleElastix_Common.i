@@ -65,6 +65,7 @@
 #include <sitkPixelIDValuesElastix.h>
 #include <sitkElastixImageFilter.h>
 #include <sitkTransformixImageFilter.h>
+#include <sitkTransformConverter.h>
 %}
 
 
@@ -124,4 +125,5 @@
 %template( VectorOfParameterMap ) std::vector< std::map< std::string, std::vector< std::string > > >;
 %include "sitkElastixImageFilter.h"
 %include "sitkTransformixImageFilter.h"
+%include "sitkTransformConverter.h"
 

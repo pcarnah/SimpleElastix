@@ -15,30 +15,37 @@
 *  limitations under the License.
 *
 *=========================================================================*/
-#ifndef sitkPixelIDTypeListsElastix_h
-#define sitkPixelIDTypeListsElastix_h
+#include "sitkTransformConverter.h"
+#include "sitkTransformConverterImpl.h"
 
-#include <stdint.h>
+namespace itk {
+	namespace simple {
 
-#include "sitkConfigure.h"
-#include "sitkPixelIDTypes.h"
-#include "sitkPixelIDTypeLists.h"
+		TransformConverter::
+			TransformConverter() : m_Pimple(new TransformConverterImpl) {}
 
-#include "Ancillary/TypeList.h"
+		TransformConverter::
+			~TransformConverter()
+		{
+			delete m_Pimple;
+			m_Pimple = NULL;
+		}
 
-#include <complex>
+		Transform
+			TransformConverter::
+			Execute()
+		{
+			return this->m_Pimple->Execute();
+		}
 
-namespace itk
-{
-namespace simple
-{
+		TransformConverter&
+			TransformConverter::
+			SetParameterMap(ParameterMapType parameterMap)
+		{
+			this->m_Pimple->SetParameterMap(parameterMap);
 
-/** SimpleElastix and SimpleTransformix is compiled with float pixel type only. This
- * saves compile time and reduces binary size. Images are automacially casted to and
- * from float before and after registration.
- */
-typedef typelist::MakeTypeList< BasicPixelID< float > >::Type FloatPixelIDTypeList;
+			return *this;
+		}
 
+	}
 }
-}
-#endif // sitkPixelIDTypeListsElastix_h
