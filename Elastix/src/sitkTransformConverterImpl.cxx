@@ -42,7 +42,7 @@ namespace itk {
 			this->m_DummyArgMap.insert(ArgumentMapEntryType("-out", "output_path_not_set"));
 
 			// Setup xout
-			if (elx::xoutSetup("SimpleElastix.log", false, true))
+			if (elx::xoutSetup("SimpleElastix.log", false, false))
 			{
 				sitkExceptionMacro("Error while setting up xout");
 			}
