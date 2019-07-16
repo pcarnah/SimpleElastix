@@ -1,8 +1,8 @@
 include(sitkExternalData)
 include(CMakeParseArguments)
 
-set(SimpleITK_DATA_ROOT ${SimpleITK_SOURCE_DIR}/Testing/Data)
-set(SimpleITK_TEST_OUTPUT_DIR ${CMAKE_BINARY_DIR}/Testing/Temporary)
+set(SimpleElastix_DATA_ROOT ${SimpleElastix_SOURCE_DIR}/Testing/Data)
+set(SimpleElastix_TEST_OUTPUT_DIR ${CMAKE_BINARY_DIR}/Testing/Temporary)
 
 #-----------------------------------------------------------------------------
 # SimpleITK wrapper for add_test that adds support for external data,

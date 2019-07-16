@@ -96,7 +96,7 @@ endif()
 
 
 
-if (NOT CMAKE_PROJECT_NAME STREQUAL "SimpleITK" AND BUILD_TESTING)
+if (NOT CMAKE_PROJECT_NAME STREQUAL "SimpleElastix" AND BUILD_TESTING)
   set(WRAP_PYTHON 1)
 
   add_subdirectory("${SimpleITK_SOURCE_DIR}/Testing/Unit/Python" "${CMAKE_BINARY_DIR}/Testing/Unit")
@@ -106,6 +106,6 @@ if (NOT CMAKE_PROJECT_NAME STREQUAL "SimpleITK" AND BUILD_TESTING)
   endif()
 
   if(COMMAND ExternalData_Add_Target )
-    ExternalData_Add_Target( SimpleITKData )
+    ExternalData_Add_Target( SimpleElastixData )
   endif()
 endif()

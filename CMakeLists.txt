@@ -100,7 +100,7 @@ endif()
 
 #----------------------------------------------------------
 # Place all options to go into sitkConfigure.h here
-option(BUILD_SHARED_LIBS "Build SimpleITK ITK with shared libraries. This does not effect wrapped languages." OFF)
+option(BUILD_SHARED_LIBS "Build SimpleITK ITK with shared libraries. This does not effect wrapped languages." ON)
 set(SITK_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 
 
@@ -319,15 +319,14 @@ include(${SimpleElastix_SOURCE_DIR}/Utilities/KWStyle/KWStyle.cmake)
 #------------------------------------------------------------------------------
 # set things up for testing, if enabled
 
-if ( BUILD_TESTING )
+option(BUILD_TESTING "Build the Testing directory." OFF)
 
-  include( sitkAddTest )
 
-  enable_testing()
-  add_subdirectory ( Testing )
+# optional examples directory with testing
+option(BUILD_EXAMPLES "Build the Examples directory." ON)
 
-  set(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
-  configure_file(CMake/CTestCustom.cmake.in CTestCustom.cmake)
+if(BUILD_EXAMPLES)
+  add_subdirectory ( Examples )
 endif()
 
 
