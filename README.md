@@ -1,3 +1,7 @@
+Simple Elastix Fork
+======================
+This fork of SimpleElastix aims to seperate the API of Elastix filters from SimpleITK to allow SimpleElastix to be built against and used with existing SimpleITK builds. Currently no SuperBuild exists for this fork so in order to build, you must already have ITK, SimpleITK and elastix built on your system and configure CMake to find these packages manually.
+
 What is SimpleElastix?
 ======================
 Image registration is the process of transforming images into a common coordinate system so corresponding pixels represent homologous biological points. SimpleElastix is an extension of [SimpleITK](https://github.com/SimpleITK/SimpleITK "SimpleITK github repository") that offers a user-friendly API to the popular image registration algorithms of the [elastix](http://elastix.isi.uu.nl/ "Elastix website") C++ library. This makes state-of-the-art medical image registration really easy to do in languages like Python, Java, C# and R. This package provides
@@ -20,6 +24,7 @@ SimpleElastix can also be used for more complex image processing pipelines. Say 
 
 ```python
 import SimpleITK as sitk
+import SimpleElastix
 
 # The atlas and associated segmentation is loaded once and held in memory
 movingImage = sitk.ReadImage('atlasImage.hdr')
@@ -29,7 +34,7 @@ movingLabel = sitk.ReadImage('atlasLabel.hdr')
 # paths to images which we will loop over. 
 population = ['image1.dcm', 'image2.dcm', ... , 'imageN.dcm']
 
-selx = sitk.ElastixImageFilter()
+selx = SimpleElastix.ElastixImageFilter()
 selx.SetMovingImage(movingImage)
 selx.SetParameterMap(selx.GetDefaultParameterMap('nonrigid'))
 
@@ -40,7 +45,7 @@ for filename in population
   selx.Execute()
 
   # Transform label map using the deformation field from above
-  resultLabel = sitk.Transformix(movingLabel, selx.GetTransformParameterMap())
+  resultLabel = SimpleElastix.Transformix(movingLabel, selx.GetTransformParameterMap())
 
   # Compute statistics for label 1
   LabelStatistics = sitk.LabelStatisticsImageFilter()
