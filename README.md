@@ -1,4 +1,4 @@
-Simple Elastix Fork
+SimpleElastix Fork
 ======================
 This fork of SimpleElastix aims to seperate the API of Elastix filters from SimpleITK to allow SimpleElastix to be built against and used with existing SimpleITK builds. Currently no SuperBuild exists for this fork so in order to build, you must already have ITK, SimpleITK and elastix built on your system and configure CMake to find these packages manually.
 
