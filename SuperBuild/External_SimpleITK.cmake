@@ -104,7 +104,7 @@ if(NOT DEFINED ${proj}_DIR AND NOT ${CMAKE_PROJECT_NAME}_USE_SYSTEM_${proj})
     #--Install step-----------------
     INSTALL_COMMAND ""
     DEPENDS
-      ${${proj}_DEPENDS}
+      ${${CMAKE_PROJECT_NAME}_DEPENDENCIES}
     )
   #set(${proj}_DIR ${${proj}_INSTALL_DIR})
   #if(UNIX)
