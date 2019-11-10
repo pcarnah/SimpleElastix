@@ -23,7 +23,7 @@
 #include "sitkPixelIDValues.h"
 #include "sitkPixelIDValuesElastix.h"
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkTransformBase.h"
 
 namespace itk {
