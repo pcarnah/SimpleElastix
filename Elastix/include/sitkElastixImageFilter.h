@@ -1,8 +1,10 @@
 #ifndef __sitkelastiximagefilter_h_
 #define __sitkelastiximagefilter_h_
 
+#include <map>
+
+#include "sitkCommon.h"
 #include "sitkImage.h"
-#include "sitkImageFilter.h"
 
 namespace itk { 
   namespace simple {
@@ -10,7 +12,7 @@ namespace itk {
 /** \class ElastixImageFilter
 * \brief The class that wraps the elastix registration library.
 */
-class SITKBasicFilters_EXPORT ElastixImageFilter
+class SITKCommon_EXPORT ElastixImageFilter
 {
 public:
 
@@ -151,25 +153,25 @@ public:
 
 private:
 
-  class ElastixImageFilterImpl;
+  struct ElastixImageFilterImpl;
   ElastixImageFilterImpl* m_Pimple;
     
 };
 
 // Procedural Interface 
-SITKBasicFilters_EXPORT std::map< std::string, std::vector< std::string > > GetDefaultParameterMap( const std::string transform, const unsigned int numberOfResolutions = 4, const double finalGridSpacingInPhysicalUnits = 8.0 );
-SITKBasicFilters_EXPORT std::map< std::string, std::vector< std::string > > ReadParameterFile( const std::string filename );
-SITKBasicFilters_EXPORT void WriteParameterFile( const std::map< std::string, std::vector< std::string > > parameterMap, const std::string filename );
-SITKBasicFilters_EXPORT void PrintParameterMap( const std::map< std::string, std::vector< std::string > > parameterMap );
-SITKBasicFilters_EXPORT void PrintParameterMap( const std::vector< std::map< std::string, std::vector< std::string > > > parameterMapVector );
-SITKBasicFilters_EXPORT Image Elastix( const Image& fixedImage, const Image& movingImage, const bool logToConsole = false, const bool logToFile = false, const std::string outputDirectory = "." );
-SITKBasicFilters_EXPORT Image Elastix( const Image& fixedImage, const Image& movingImage, const Image& fixedMask, const Image& movingMask, const bool logToConsole = false, const bool logToFile = false, const std::string outputDirectory = "." );
-SITKBasicFilters_EXPORT Image Elastix( const Image& fixedImage, const Image& movingImage, const std::string defaultParameterMapName, const bool logToConsole = false, const bool logToFile = false, const std::string outputDirectory = "." );
-SITKBasicFilters_EXPORT Image Elastix( const Image& fixedImage, const Image& movingImage, const std::map< std::string, std::vector< std::string > > parameterMap, const bool logToConsole = false, const bool logToFile = false, const std::string outputDirectory = "." );
-SITKBasicFilters_EXPORT Image Elastix( const Image& fixedImage, const Image& movingImage, const std::vector< std::map< std::string, std::vector< std::string > > > parameterMapVector, const bool logToConsole = false, const bool logToFile = false, const std::string outputDirectory = "." );
-SITKBasicFilters_EXPORT Image Elastix( const Image& fixedImage, const Image& movingImage, const std::string defaultParameterMapName, const Image& fixedMask, const Image& movingMask, const bool logToConsole = false, const bool logToFile = false, const std::string outputDirectory = "." );
-SITKBasicFilters_EXPORT Image Elastix( const Image& fixedImage, const Image& movingImage, const std::map< std::string, std::vector< std::string > >, const Image& fixedMask, const Image& movingMask, const bool logToConsole = false, const bool logToFile = false, const std::string outputDirectory = "." );
-SITKBasicFilters_EXPORT Image Elastix( const Image& fixedImage, const Image& movingImage, std::vector< std::map< std::string, std::vector< std::string > > > parameterMapVector, const Image& fixedMask, const Image& movingMask, const bool logToConsole = false, const bool logToFile = false, const std::string outputDirectory = "." );
+SITKCommon_EXPORT std::map< std::string, std::vector< std::string > > GetDefaultParameterMap( const std::string transform, const unsigned int numberOfResolutions = 4, const double finalGridSpacingInPhysicalUnits = 8.0 );
+SITKCommon_EXPORT std::map< std::string, std::vector< std::string > > ReadParameterFile( const std::string filename );
+SITKCommon_EXPORT void WriteParameterFile( const std::map< std::string, std::vector< std::string > > parameterMap, const std::string filename );
+SITKCommon_EXPORT void PrintParameterMap( const std::map< std::string, std::vector< std::string > > parameterMap );
+SITKCommon_EXPORT void PrintParameterMap( const std::vector< std::map< std::string, std::vector< std::string > > > parameterMapVector );
+SITKCommon_EXPORT Image Elastix( const Image& fixedImage, const Image& movingImage, const bool logToConsole = false, const bool logToFile = false, const std::string outputDirectory = "." );
+SITKCommon_EXPORT Image Elastix( const Image& fixedImage, const Image& movingImage, const Image& fixedMask, const Image& movingMask, const bool logToConsole = false, const bool logToFile = false, const std::string outputDirectory = "." );
+SITKCommon_EXPORT Image Elastix( const Image& fixedImage, const Image& movingImage, const std::string defaultParameterMapName, const bool logToConsole = false, const bool logToFile = false, const std::string outputDirectory = "." );
+SITKCommon_EXPORT Image Elastix( const Image& fixedImage, const Image& movingImage, const std::map< std::string, std::vector< std::string > > parameterMap, const bool logToConsole = false, const bool logToFile = false, const std::string outputDirectory = "." );
+SITKCommon_EXPORT Image Elastix( const Image& fixedImage, const Image& movingImage, const std::vector< std::map< std::string, std::vector< std::string > > > parameterMapVector, const bool logToConsole = false, const bool logToFile = false, const std::string outputDirectory = "." );
+SITKCommon_EXPORT Image Elastix( const Image& fixedImage, const Image& movingImage, const std::string defaultParameterMapName, const Image& fixedMask, const Image& movingMask, const bool logToConsole = false, const bool logToFile = false, const std::string outputDirectory = "." );
+SITKCommon_EXPORT Image Elastix( const Image& fixedImage, const Image& movingImage, const std::map< std::string, std::vector< std::string > >, const Image& fixedMask, const Image& movingMask, const bool logToConsole = false, const bool logToFile = false, const std::string outputDirectory = "." );
+SITKCommon_EXPORT Image Elastix( const Image& fixedImage, const Image& movingImage, std::vector< std::map< std::string, std::vector< std::string > > > parameterMapVector, const Image& fixedMask, const Image& movingMask, const bool logToConsole = false, const bool logToFile = false, const std::string outputDirectory = "." );
 
 } // end namespace simple
 } // end namespace itk

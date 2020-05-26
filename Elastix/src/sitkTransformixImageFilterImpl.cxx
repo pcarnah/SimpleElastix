@@ -5,8 +5,8 @@
 #include "sitkTransformixImageFilterImpl.h"
 #include "sitkCastImageFilter.h"
 #include "sitkImageConvert.h"
-#include "sitkPixelIDValuesElastix.h"
 #include "sitkPixelIDTypeListsElastix.h"
+#include "sitkPixelIDValuesElastix.h"
 
 namespace itk {
   namespace simple {
@@ -18,6 +18,10 @@ TransformixImageFilter::TransformixImageFilterImpl
   this->m_MemberFactory.reset( new detail::MemberFunctionFactory< MemberFunctionType >( this ) );
   this->m_MemberFactory->RegisterMemberFunctions< FloatPixelIDTypeList, 2 >();
   this->m_MemberFactory->RegisterMemberFunctions< FloatPixelIDTypeList, 3 >();
+
+#ifdef SITK_4D_IMAGES
+  m_MemberFactory->RegisterMemberFunctions< FloatPixelIDTypeList, 4 >();
+#endif
 
   this->m_MovingImage = Image();
   this->m_ResultImage = Image();
@@ -105,7 +109,7 @@ TransformixImageFilter::TransformixImageFilterImpl
     }
 
     if( this->GetComputeDeformationField() ) {
-      this->m_DeformationField = Image( itk::simple::GetVectorImageFromImage( transformixFilter->GetOutputDeformationField() ) );
+      this->m_DeformationField = Image( itk::simple::GetVectorImageFromImage( transformixFilter->GetOutputDeformationField(), true ) );
       this->m_DeformationField.MakeUnique();
     }
   }

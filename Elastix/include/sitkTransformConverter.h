@@ -3,6 +3,7 @@
 
 #include "sitkCommon.h"
 #include "sitkTransform.h"
+#include <map>
 
 
 /** \class TransformConverter

@@ -12,7 +12,6 @@
 
 namespace itk { 
   namespace simple {
-	  
 
 class ElastixImageFilter::ElastixImageFilterImpl
 {
@@ -146,7 +145,7 @@ public:
   typedef Image ( Self::*MemberFunctionType )( void );
   template< class TFixedImage, class TMovingImage > Image DualExecuteInternal( void );
   friend struct detail::DualExecuteInternalAddressor< MemberFunctionType >;
-  nsstd::auto_ptr< detail::DualMemberFunctionFactory< MemberFunctionType > > m_DualMemberFactory;
+  std::unique_ptr< detail::DualMemberFunctionFactory< MemberFunctionType > > m_DualMemberFactory;
 
   VectorOfImage           m_FixedImages;
   VectorOfImage           m_MovingImages;

@@ -7,7 +7,6 @@
 namespace itk {
   namespace simple {
 
-
 ElastixImageFilter
 ::ElastixImageFilter() : m_Pimple( new ElastixImageFilterImpl )
 {

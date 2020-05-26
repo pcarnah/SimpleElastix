@@ -5,10 +5,10 @@
 #include "sitkElastixImageFilterImpl.h"
 #include "sitkCastImageFilter.h"
 #include "sitkPixelIDTypeListsElastix.h"
+#include "sitkPixelIDValuesElastix.h"
 
 namespace itk {
   namespace simple {
-	
 
 ElastixImageFilter::ElastixImageFilterImpl
 ::ElastixImageFilterImpl( void )
@@ -18,6 +18,9 @@ ElastixImageFilter::ElastixImageFilterImpl
   this->m_DualMemberFactory->RegisterMemberFunctions< FloatPixelIDTypeList, FloatPixelIDTypeList, 2 >();
   this->m_DualMemberFactory->RegisterMemberFunctions< FloatPixelIDTypeList, FloatPixelIDTypeList, 3 >();
 
+#ifdef SITK_4D_IMAGES
+  //this->m_DualMemberFactory->RegisterMemberFunctions< FloatPixelIDTypeList, FloatPixelIDTypeList, 4 >();
+#endif
  
   this->m_FixedImages                 = VectorOfImage();
   this->m_MovingImages                = VectorOfImage();
